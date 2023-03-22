@@ -8,11 +8,11 @@ const httpTrigger: AzureFunction = async function (
   context.log("HTTP trigger function processed a request.");
 
   const name = req.query.name || (req.body && req.body.name);
-  const category = req.query.category || (req.body && req.body.category;
-  const species = req.query.category || (req.body && req.body.speices;
-  const length = req.query.category || (req.body && req.body.length;
-  const weight_lb = req.query.category || (req.body && req.body.weight_lb;
-  const weight_oz = req.query.category || (req.body && req.body.weight_oz;
+  const age_group = req.query.age_group || (req.body && req.body.age_group);
+  const species = req.query.species || (req.body && req.body.species);
+  const length = req.query.length || (req.body && req.body.length);
+  const weight_lb = req.query.weight_lb || (req.body && req.body.weight_lb);
+  const weight_oz = req.query.weight_oz || (req.body && req.body.weight_oz);
 
   const endpoint = "https://flpoleaderboard.documents.azure.com:443/";
   const key = "9ZR8ABLhbQQycoaEl22ZszR2xAcdRZ0Iru2Ee7GRabwTUFS2bnRDocWPxtY5uXNrO9DxPanbtFhfACDbMSHbHg==";
@@ -23,7 +23,7 @@ const httpTrigger: AzureFunction = async function (
   const database = client.database(databaseId);
   const container = database.container(containerId);
 
-  const item = { name,category,species,length,weight_lb,weight_oz };
+  const item = { name,age_group,species,length,weight_lb,weight_oz };
 
   const { resource: createdItem } = await container.items.create(item);
 

@@ -5,6 +5,7 @@ import './App.css';
 import NavBar from './components/NavBar';
 import PublicHome from './components/PublicHome';
 import PrivateHome from './components/PrivateHome';
+import LeaderBoard from './components/LeaderBoard';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
       <NavBar user={user}/>
       <main className="column">
         { isAuthenticated ? <PrivateHome user={user}/> : <PublicHome /> }
+        <LeaderBoard/>
       </main>
     </div>
   )
