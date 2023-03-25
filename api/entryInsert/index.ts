@@ -14,10 +14,11 @@ const httpTrigger: AzureFunction = async function (
   const weight_lb = req.query.weight_lb || (req.body && req.body.weight_lb);
   const weight_oz = req.query.weight_oz || (req.body && req.body.weight_oz);
 
-  const endpoint = "https://flpoleaderboard.documents.azure.com:443/";
-  const key = "9ZR8ABLhbQQycoaEl22ZszR2xAcdRZ0Iru2Ee7GRabwTUFS2bnRDocWPxtY5uXNrO9DxPanbtFhfACDbMSHbHg==";
-  const databaseId = "entries";
-  const containerId = "Container1";
+  require('dotenv').config()
+  const endpoint = process.env.endpoint;
+  const key = process.env.key;
+  const databaseId = process.env.databaseId;
+  const containerId = process.env.containerId;
 
   const client = new cosmos.CosmosClient({ endpoint, key });
   const database = client.database(databaseId);

@@ -1,49 +1,103 @@
 import React, {useEffect} from 'react';
 import logo from '../logo.svg';
+import { useState} from "react";
+import axios from "axios";
 
-function PrivateHome({user}) {
-
-    const [name, setName] = React.useState('');
-    const [message, setMessage] = React.useState('');
-
-    useEffect(() => {
-        if(user && user?.userDetails){
-            setName(user?.userDetails);  
-        }
-      }, [user]);
-
-    const getDataFromApi = async (e: any) => {
-        e.preventDefault();
-        const data = await fetch(`/api/hello?name=${name}`);
-        const json = await data.json();
-
-        if (json.message) {
-            setMessage(json.message);
-        }
+export default function AddData(user) {
+    const [name, setName] = useState("");
+    const [age_group, setAge_Group] = useState("");
+    const [species, setSpecies] = useState("");
+    const [length, setLength] = useState("");
+    const [weight_lb, setWeight_Lb] = useState("");
+    const [weight_oz, setWeight_Oz] = useState("");
+    const [message, setMessage] = useState("");
+  
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+  
+      try {
+        await axios.post("/api/entryInsert", {
+          name,
+          age_group,
+          species,
+          length,
+          weight_lb,
+          weight_oz
+        });
+  
+        setMessage("Data added successfully!");
+      } catch (error) {
+        console.error(error);
+        setMessage("An error occurred while adding the data.");
+      }
     };
-
+   
+  
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Static Web App: React App with Azure Function API
-                </p>
-                <form id="form1" className="App-form" onSubmit={e => getDataFromApi(e)}>
-                    <div>
-                        <input
-                            type="text"
-                            id="name"
-                            className="App-input"
-                            placeholder="Name"
-                            value={name}
-                            onChange={e => setName(e.target.value)} />
-                        <button type="submit" className="App-button">Submit</button>
-                    </div>
-                </form>
-                <div><h5>Message: {message} </h5></div>
-            </header>
-        </div>
+      <div>
+        <h2>Add Data</h2>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input
+              type="text"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </label>
+          <br />
+          <label>
+            Age Group:
+            <select value={age_group} onChange={(event) => setAge_Group(event.target.value)}>
+              <option value="">--Select Age Group--</option>
+              <option value="Adult">Adult</option>
+              <option value="Child">Child</option>
+            </select>
+          </label>
+          <br />
+          <label>
+            Species:
+            <select value={species} onChange={(event) => setSpecies(event.target.value)}>
+              <option value="">--Select Species--</option>            
+              <option value="Northern Pike">Northern Pike</option>
+              <option value="Perch">Perch</option>
+              <option value="Walleye">Walleye</option>
+            </select>          
+          </label>
+          <br />
+          <label>
+            Length:
+            <input
+              type="text"
+              pattern="[0-9]*\.?[0-9]*"
+              value={length}
+              onChange={(event) => setLength(event.target.value)}
+            />
+          </label>
+          <br />
+          <label>
+            Weight Lb:
+            <input
+              type="text"
+              pattern="[0-9]*\.?[0-9]*"
+              value={weight_lb}
+              onChange={(event) => setWeight_Lb(event.target.value)}
+            />
+          </label>
+          <br />
+          <label>
+            Weight Oz:
+            <input
+              type="text"
+              pattern="[0-9]*\.?[0-9]*"
+              value={weight_oz}
+              onChange={(event) => setWeight_Oz(event.target.value)}
+            />
+          </label>
+          <br />
+          <button type="submit">Add Data</button>
+        </form>
+        <p>{message}</p>
+      </div>
     );
-}
-export default PrivateHome;
+  }

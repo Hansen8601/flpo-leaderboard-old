@@ -1,102 +1,108 @@
-import { useState} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function AddData() {
-  const [name, setName] = useState("");
-  const [age_group, setAge_Group] = useState("");
-  const [species, setSpecies] = useState("");
-  const [length, setLength] = useState("");
-  const [weight_lb, setWeight_Lb] = useState("");
-  const [weight_oz, setWeight_Oz] = useState("");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      await axios.post("/api/entryInsert", {
-        name,
-        age_group,
-        species,
-        length,
-        weight_lb,
-        weight_oz
-      });
-
-      setMessage("Data added successfully!");
-    } catch (error) {
-      console.error(error);
-      setMessage("An error occurred while adding the data.");
-    }
-  };
- 
-
-  return (
-    <div>
-      <h2>Add Data</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Age Group:
-          <select value={age_group} onChange={(event) => setAge_Group(event.target.value)}>
-            <option value="">--Select Age Group--</option>
-            <option value="Adult">Adult</option>
-            <option value="Child">Child</option>
-          </select>
-        </label>
-        <br />
-        <label>
-          Species:
-          <select value={species} onChange={(event) => setSpecies(event.target.value)}>
-            <option value="">--Select Species--</option>            
-            <option value="Northern Pike">Northern Pike</option>
-            <option value="Perch">Perch</option>
-            <option value="Walleye">Walleye</option>
-          </select>          
-        </label>
-        <br />
-        <label>
-          Length:
-          <input
-            type="text"
-            pattern="[0-9]*\.?[0-9]*"
-            value={length}
-            onChange={(event) => setLength(event.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Weight Lb:
-          <input
-            type="text"
-            pattern="[0-9]*\.?[0-9]*"
-            value={weight_lb}
-            onChange={(event) => setWeight_Lb(event.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Weight Oz:
-          <input
-            type="text"
-            pattern="[0-9]*\.?[0-9]*"
-            value={weight_oz}
-            onChange={(event) => setWeight_Oz(event.target.value)}
-          />
-        </label>
-        <br />
-        <button type="submit">Add Data</button>
-      </form>
-      <p>{message}</p>
-    </div>
-  );
+export interface Entry {
+  name: string;
+  age_group: string;
+  species: string;
+  length: number;
+  weight_lb: number;
+  weight_oz: number;
+  id: string;
+  _rid: string;
+  _self: string;
+  _etag: string;
+  _attachments: string;
+  _ts: number;
 }
 
+export default function GetData() {
+
+  //const [data, setData] = useState([]);
+  const [data, setData] = useState<Entry[]>([]);
+ 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get("/api/entryGet");
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+        setData([]);
+      }
+    }
+    fetchData();
+  }, []);
+
+  //data.sort((a,b) => b.length - a.length);
+  data.sort((a,b) => {
+    if (a.species < b.species) {
+      return -1;
+    } else if (a.species > b.species) {
+      return 1;
+    } else {
+      return b.length - a.length;
+    }
+  })
+  
+  return (
+<div>
+
+<h2>Adult</h2>
+{data.filter((item) => item.age_group === 'Adult').length > 0 ? (
+  // group data by species
+  Object.entries(
+    data.filter((item) => item.age_group === 'Adult').reduce<{[key: string]: Entry[]}>((acc, item) => {
+        if (!acc[item.species]) acc[item.species] = [];
+        acc[item.species].push(item);
+        return acc;
+      }, {})
+  ).map(([species, items]) => (
+    <div key={species}>
+      <h3>{species}</h3>
+      <ul>
+        {items.map((item, index) => (
+        <li key={item.id}>
+          <h4>Record {index + 1}</h4>
+          <p>Name: {item.name}</p>
+          <p>Length: {item.length}</p>
+          <p>Weight: {item.weight_lb} lb {item.weight_oz} oz</p>
+        </li>
+        ))}
+      </ul>
+    </div>
+  ))
+) : (
+  <p>No data found for Adult.</p>
+)}
+
+<h2>Children</h2>
+{data.filter((item) => item.age_group === 'Child').length > 0 ? (
+  // group data by species
+  Object.entries(
+    data.filter((item) => item.age_group === 'Child').reduce<{[key: string]: Entry[]}>((acc, item) => {
+        if (!acc[item.species]) acc[item.species] = [];
+        acc[item.species].push(item);
+        return acc;
+      }, {})
+  ).map(([species, items]) => (
+    <div key={species}>
+      <h3>{species}</h3>
+      <ul>
+        {items.map((item, index) => (
+        <li key={item.id}>
+          <p>Record {index + 1}</p>
+          <p>Name: {item.name}</p>
+          <p>Length: {item.length}</p>
+          <p>Weight: {item.weight_lb} lb {item.weight_oz} oz</p>
+        </li>
+        ))}
+      </ul>
+    </div>
+  ))
+) : (
+  <p>No data found for Children.</p>
+)}
+</div>
+  );
+}
