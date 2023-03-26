@@ -26,12 +26,21 @@ const httpTrigger: AzureFunction = async function (
 
   const item = { name,age_group,species,length,weight_lb,weight_oz };
 
-  const { resource: createdItem } = await container.items.create(item);
+  try {
+    const { resource: createdItem } = await container.items.create(item);
 
-  context.res = {
-    status: 200,
-    body: "Data added to container",
-  };
+    context.res = {
+      status: 200,
+      body: item,
+    };
+  
+  } catch (error) {
+    context.log(error);
+    context.res = {
+      status: 500,
+      body: "Internal server error",
+    };
 };
-
+}
 export default httpTrigger;
+

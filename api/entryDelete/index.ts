@@ -14,8 +14,6 @@ module.exports = async function (context, req) {
     const { id } = req.body;
     const partitionKey = id;
 
-    console.log(id)
-
     // Delete the record from the container
     const { resource: deletedItem } = await client
       .database(databaseId)

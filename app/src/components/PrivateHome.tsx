@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
-import logo from '../logo.svg';
 import { useState} from "react";
 import axios from "axios";
+
+import PrivateDelete from './PrivateDelete';
 
 export default function AddData(user) {
     const [name, setName] = useState("");
@@ -12,7 +13,7 @@ export default function AddData(user) {
     const [weight_oz, setWeight_Oz] = useState("");
     const [message, setMessage] = useState("");
   
-    const handleSubmit = async (event) => {
+    const handleInsert = async (event) => {
       event.preventDefault();
   
       try {
@@ -25,7 +26,9 @@ export default function AddData(user) {
           weight_oz
         });
   
+        window.location.reload(); // Reload the page after deletion
         setMessage("Data added successfully!");
+        
       } catch (error) {
         console.error(error);
         setMessage("An error occurred while adding the data.");
@@ -36,7 +39,7 @@ export default function AddData(user) {
     return (
       <div>
         <h2>Add Data</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleInsert}>
           <label>
             Name:
             <input
@@ -98,6 +101,7 @@ export default function AddData(user) {
           <button type="submit">Add Data</button>
         </form>
         <p>{message}</p>
+<PrivateDelete/>
       </div>
     );
   }
