@@ -4,7 +4,7 @@ import './App.css';
 // Custom components
 import NavBar from './components/NavBar';
 import PublicHome from './components/PublicHome';
-import PrivateHome from './components/PrivateNew';
+import PrivateHome from './components/PrivateHome';
 
 function App() {
 
