@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Box, Grid, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
+
 
 export interface Entry {
   name: string;
@@ -46,63 +48,72 @@ export default function GetData() {
   })
   
   return (
-<div>
+  <Box>
+    <Typography variant="h4" gutterBottom>Adult</Typography>
+    <Grid container spacing={4}>
+      {data.filter((item) => item.age_group === 'Adult').length > 0 ? (
+      // group data by species
+        Object.entries(
+        data.filter((item) => item.age_group === 'Adult').reduce<{[key: string]: Entry[]}>((acc, item) => {
+            if (!acc[item.species]) acc[item.species] = [];
+            acc[item.species].push(item);
+            return acc;
+          }, {})
+        ).map(([species, items]) => (
+          <Grid item xs={12} md={6} lg={4} key={species}>
+          <Typography variant="h5">{species}</Typography>
+          <List>
+            {items.map((item, index) => (
+              <ListItem key={item.id} disableGutters>
+                <ListItemText>
+                  <Typography variant="h6">Record {index + 1}</Typography>
+                  <Typography>Name: {item.name}</Typography>
+                  <Typography>Length: {item.length}</Typography>
+                  <Typography>Weight: {item.weight_lb} lb {item.weight_oz} oz</Typography>
+                </ListItemText>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Grid>
+      ))
+    ) : (
+      <p>No data found for Adult.</p>
+    )}
+  </Grid>
 
-<h2>Adult</h2>
-{data.filter((item) => item.age_group === 'Adult').length > 0 ? (
-  // group data by species
-  Object.entries(
-    data.filter((item) => item.age_group === 'Adult').reduce<{[key: string]: Entry[]}>((acc, item) => {
-        if (!acc[item.species]) acc[item.species] = [];
-        acc[item.species].push(item);
-        return acc;
-      }, {})
-  ).map(([species, items]) => (
-    <div key={species}>
-      <h3>{species}</h3>
-      <ul>
-        {items.map((item, index) => (
-        <li key={item.id}>
-          <h4>Record {index + 1}</h4>
-          <p>Name: {item.name}</p>
-          <p>Length: {item.length}</p>
-          <p>Weight: {item.weight_lb} lb {item.weight_oz} oz</p>
-        </li>
-        ))}
-      </ul>
-    </div>
-  ))
-) : (
-  <p>No data found for Adult.</p>
-)}
-
-<h2>Children</h2>
-{data.filter((item) => item.age_group === 'Child').length > 0 ? (
-  // group data by species
-  Object.entries(
-    data.filter((item) => item.age_group === 'Child').reduce<{[key: string]: Entry[]}>((acc, item) => {
-        if (!acc[item.species]) acc[item.species] = [];
-        acc[item.species].push(item);
-        return acc;
-      }, {})
-  ).map(([species, items]) => (
-    <div key={species}>
-      <h3>{species}</h3>
-      <ul>
-        {items.map((item, index) => (
-        <li key={item.id}>
-          <p>Record {index + 1}</p>
-          <p>Name: {item.name}</p>
-          <p>Length: {item.length}</p>
-          <p>Weight: {item.weight_lb} lb {item.weight_oz} oz</p>
-        </li>
-        ))}
-      </ul>
-    </div>
-  ))
-) : (
-  <p>No data found for Children.</p>
-)}
-</div>
+  <Typography variant="h4" gutterBottom>Children</Typography>
+    <Grid container spacing={4}>
+      {data.filter((item) => item.age_group === 'Child').length > 0 ? (
+      // group data by species
+        Object.entries(
+        data.filter((item) => item.age_group === 'Child').reduce<{[key: string]: Entry[]}>((acc, item) => {
+            if (!acc[item.species]) acc[item.species] = [];
+            acc[item.species].push(item);
+            return acc;
+          }, {})
+        ).map(([species, items]) => (
+          <Grid item xs={12} md={6} lg={4} key={species}>
+          <Typography variant="h5">{species}</Typography>
+          <List>
+            {items.map((item, index) => (
+              <ListItem key={item.id} disableGutters>
+                <ListItemText>
+                  <Typography variant="h6">Record {index + 1}</Typography>
+                  <Typography>Name: {item.name}</Typography>
+                  <Typography>Length: {item.length}</Typography>
+                  <Typography>Weight: {item.weight_lb} lb {item.weight_oz} oz</Typography>
+                </ListItemText>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Grid>
+      ))
+      ) : (
+      <p>No data found for Children.</p>
+     )}
+    </Grid>
+  </Box>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+import './App.css'
 
 // Custom components
 import NavBar from './components/NavBar';

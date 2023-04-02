@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import React from 'react';
+import { Button, Grid, FormControl, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, TextField } from '@mui/material';
 
 export interface Entry {
   name: string;
@@ -67,11 +69,10 @@ export default function PrivateHome(user) {
         weight_lb,
         weight_oz,
       });
-  
-      console.log(response.data)
+
       setData([...data, response.data]);
 
-      setMessage("Data added successfully!");
+      setMessage("Data saved successfully!");
       setName("");
       setAgeGroup("");
       setSpecies("");
@@ -80,7 +81,7 @@ export default function PrivateHome(user) {
       setWeightOz(0);
     } catch (error) {
       console.error(error);
-      setMessage("An error occurred while adding the data.");
+      setMessage("An error occurred while saving the data.");
     }
   };
 
@@ -94,129 +95,167 @@ export default function PrivateHome(user) {
     }
   }); 
 
-/*   useEffect(() => {
-    // Sort the data array
-    data.sort((a, b) => {
-      if (a.species < b.species) {
-        return -1;
-      } else if (a.species > b.species) {
-        return 1;
-      } else {
-        return b.length - a.length;
-      }
-    });
-  }, [data]); */
-
   return (
 
     <div>
-        <div>
-            <h2>Add Data</h2>
-            <form onSubmit={handleInsert}>
-            <label>
-                Name:
-                <input
-                type="text"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                />
-            </label>
-            <br />
-            <label>
-                Age Group:
-                <select value={age_group} onChange={(event) => setAgeGroup(event.target.value)}>
-                <option value="">--Select Age Group--</option>
-                <option value="Adult">Adult</option>
-                <option value="Child">Child</option>
-                </select>
-            </label>
-            <br />
-            <label>
-                Species:
-                <select value={species} onChange={(event) => setSpecies(event.target.value)}>
-                <option value="">--Select Species--</option>            
-                <option value="Northern Pike">Northern Pike</option>
-                <option value="Perch">Perch</option>
-                <option value="Walleye">Walleye</option>
-                </select>          
-            </label>
-            <br />
-            <label>
-                Length:
-                <input
-                type="text"
-                pattern="[0-9]*\.?[0-9]*"
-                value={length}
-                onChange={(event) => setLength(parseFloat(event.target.value))}
-                />
-            </label>
-            <br />
-            <label>
-                Weight Lb:
-                <input
-                type="text"
-                pattern="[0-9]*\.?[0-9]*"
-                value={weight_lb}
-                onChange={(event) => setWeightLb(parseFloat(event.target.value))}
-                />
-            </label>
-            <br />
-            <label>
-                Weight Oz:
-                <input
-                type="text"
-                pattern="[0-9]*\.?[0-9]*"
-                value={weight_oz}
-                onChange={(event) => setWeightOz(parseFloat(event.target.value))}
-                />
-            </label>
-            <br />
-            <button type="submit">Add Data</button>
-            </form>
-            <p>{message}</p>
-        </div>
+  <div>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Add Data
+      </Typography>
 
-        <div>
-            <h2>Adult</h2>
-            <table>
-                    <thead>
-                    <tr>
-                        <th>Species</th>
-                        <th>Record #</th>
-                        <th>Name</th>
-                        <th>Length</th>
-                        <th>Weight</th>
-                    </tr>
-                    </thead>
+      <form onSubmit={handleInsert}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              fullWidth
+            />
+          </Grid>
 
-            {data.filter((item) => item.age_group === 'Adult').length > 0 ? (
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <TextField
+                select
+                label="Age Group"
+                value={age_group}
+                onChange={(event) => setAgeGroup(event.target.value)}
+              >
+                <MenuItem value="">
+                  --Select Age Group--
+                </MenuItem>
+                <MenuItem value="Adult">Adult</MenuItem>
+                <MenuItem value="Child">Child</MenuItem>
+              </TextField>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <TextField
+                select
+                label="Species"
+                value={species}
+                onChange={(event) => setSpecies(event.target.value)}
+              >
+                <MenuItem value="">
+                  --Select Species--
+                </MenuItem>
+                <MenuItem value="Northern Pike">Northern Pike</MenuItem>
+                <MenuItem value="Perch">Perch</MenuItem>
+                <MenuItem value="Walleye">Walleye</MenuItem>
+              </TextField>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Length"
+              type="number"
+              inputProps={{ step: '0.01' }}
+              value={length}
+              onChange={(event) => setLength(parseFloat(event.target.value))}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Weight Lb"
+              type="number"
+              inputProps={{ step: '0.01' }}
+              value={weight_lb}
+              onChange={(event) => setWeightLb(parseFloat(event.target.value))}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Weight Oz"
+              type="number"
+              inputProps={{ step: '0.01' }}
+              value={weight_oz}
+              onChange={(event) => setWeightOz(parseFloat(event.target.value))}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained">
+              Save Entry
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+
+      <Typography variant="body1" component="p" gutterBottom>
+        {message}
+      </Typography>
+    </div>
+
+    <div>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Adult
+      </Typography>
+
+      <TextField
+        label="Search"
+        variant="outlined"
+        style={{ marginBottom: '1rem' }}
+        onChange={(e) => {
+          // handle search logic here
+        }}
+      />
+
+      <TableContainer className="table-container">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Species</TableCell>
+              <TableCell>Record #</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Length</TableCell>
+              <TableCell>Weight</TableCell>
+            </TableRow>
+          </TableHead>
+
+          {data.filter((item) => item.age_group === 'Adult').length > 0 ? (
             // group data by species
             Object.entries(
-                data.filter((item) => item.age_group === 'Adult').reduce<{[key: string]: Entry[]}>((acc, item) => {
-                    if (!acc[item.species]) acc[item.species] = [];
-                    acc[item.species].push(item);
-                    return acc;
-                }, {})
+              data.filter((item) => item.age_group === 'Adult').reduce<{ [key: string]: Entry[] }>((acc, item) => {
+                if (!acc[item.species]) acc[item.species] = [];
+                acc[item.species].push(item);
+                return acc;
+              }, {})
             ).map(([species, items]) => (
-                    <tbody>
-                    {items.map((item, index) => (
-                    <tr key={item.id}>
-                        <td>{item.species}</td>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>{item.length}"</td>
-                        <td>{item.weight_lb} lb {item.weight_oz} oz</td>
-                        <td><button type="button" onClick={() => handleDelete(item.id)}>Delete</button></td>            
-                    </tr>
-                    ))}
-                    </tbody>
-            
+              <TableBody>
+                {items.map((item, index) => (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.species}</TableCell>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.length}"</TableCell>
+                    <TableCell>{item.weight_lb} lb {item.weight_oz} oz</TableCell>
+                    <TableCell>
+                      <Button variant="contained" onClick={() => handleDelete(item.id)}  >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             ))
-            ) : (
-            <p>No data found for Adult.</p>
-            )}
-            </table>
-            <p>{message}</p>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell>no data found for Adult.</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
     </div>
 </div>  
 );
