@@ -256,6 +256,58 @@ export default function PrivateHome(user) {
           )}
         </Table>
       </TableContainer>
+
+
+      <Typography variant="h4" component="h2" gutterBottom>
+        Children
+      </Typography>
+      <TableContainer className="table-container">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Species</TableCell>
+              <TableCell>Record #</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Length</TableCell>
+              <TableCell>Weight</TableCell>
+            </TableRow>
+          </TableHead>
+
+          {data.filter((item) => item.age_group === 'Child').length > 0 ? (
+            // group data by species
+            Object.entries(
+              data.filter((item) => item.age_group === 'Child').reduce<{ [key: string]: Entry[] }>((acc, item) => {
+                if (!acc[item.species]) acc[item.species] = [];
+                acc[item.species].push(item);
+                return acc;
+              }, {})
+            ).map(([species, items]) => (
+              <TableBody>
+                {items.map((item, index) => (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.species}</TableCell>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.length}"</TableCell>
+                    <TableCell>{item.weight_lb} lb {item.weight_oz} oz</TableCell>
+                    <TableCell>
+                      <Button variant="contained" onClick={() => handleDelete(item.id)}  >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            ))
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell>no data found for Children.</TableCell>
+              </TableRow>
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>      
     </div>
 </div>  
 );

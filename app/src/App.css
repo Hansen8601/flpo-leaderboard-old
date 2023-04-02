@@ -1,6 +1,53 @@
 /* Set font family */
 body {
   font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* style for headings */
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+/* style for paragraphs */
+p {
+  margin-bottom: 10px;
+}
+
+/* style for links */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 /* Style the container of the form and table */
@@ -109,8 +156,21 @@ body {
 }
 
 .table-container {
+  padding: 10px;
   border: 1px solid #ddd;
   padding: 1rem;
+}
+
+/* style for grid container */
+.grid-container {
+  padding: 100px;
+}
+
+/* style for grid items */
+.grid-item {
+  background-color: #ddd;
+  border: 1px solid #999;
+  padding: 5px;
 }
 
 input[type=text] {

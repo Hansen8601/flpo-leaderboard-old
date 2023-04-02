@@ -50,7 +50,7 @@ export default function GetData() {
   return (
   <Box>
     <Typography variant="h4" gutterBottom>Adult</Typography>
-    <Grid container spacing={4}>
+    <Grid container spacing={4} className="grid-container">
       {data.filter((item) => item.age_group === 'Adult').length > 0 ? (
       // group data by species
         Object.entries(
@@ -83,7 +83,7 @@ export default function GetData() {
   </Grid>
 
   <Typography variant="h4" gutterBottom>Children</Typography>
-    <Grid container spacing={4}>
+    <Grid container spacing={4} className="grid-container">
       {data.filter((item) => item.age_group === 'Child').length > 0 ? (
       // group data by species
         Object.entries(
